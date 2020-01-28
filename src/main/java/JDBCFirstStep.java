@@ -2,7 +2,7 @@ import java.sql.*;
 
 public class JDBCFirstStep {
     private static final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
-    private static final String DB_URL = "jdbc:oracle:thin:@//database-1.clkqnh5ztnkq.us-east-2.rds.amazonaws.com:1521:ORCL";
+    private static final String DB_URL = "jdbc:oracle:thin:@database-1.clkqnh5ztnkq.us-east-2.rds.amazonaws.com:1521:ORCL";
 
     private static final String USER = "main";
     private static final String PASS = "main1111";
