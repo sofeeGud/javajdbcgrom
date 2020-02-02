@@ -22,9 +22,9 @@ public class JDBCFirstStep {
                 System.out.println("Class " + JDBC_DRIVER + " not found");
                 return;
             }
-            try (ResultSet resultSet = statement.executeQuery("SELECT * FROM ORDERS")) {
+            try (ResultSet resultSet = statement.executeQuery("SELECT * FROM TEST")) {
                 while (resultSet.next()) {
-                    //todo
+                    System.out.println("Object found");
                 }
             }
         } catch (SQLException e) {
