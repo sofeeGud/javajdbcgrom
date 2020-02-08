@@ -1,4 +1,7 @@
+package lesson2;
+
 import java.sql.*;
+import java.util.Date;
 
 public class JDBCFirstStep {
     private static final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
@@ -22,9 +25,15 @@ public class JDBCFirstStep {
                 System.out.println("Class " + JDBC_DRIVER + " not found");
                 return;
             }
-            try (ResultSet resultSet = statement.executeQuery("SELECT * FROM TEST")) {
+            try (ResultSet resultSet = statement.executeQuery("SELECT * FROM Orders_one where price > 170")) {
                 while (resultSet.next()) {
-                    System.out.println("Object found");
+                    long id = resultSet.getLong(1);
+                    String productName = resultSet.getString(2);
+                    int price = resultSet.getInt(3);
+                    Date dateOrdered = resultSet.getDate(4);
+                    Date dateConfirmed = resultSet.getDate(5);
+                    Order order = new Order(id, productName, price, dateOrdered, dateConfirmed);
+                    System.out.println(order);
                 }
             }
         } catch (SQLException e) {
