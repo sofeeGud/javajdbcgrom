@@ -98,7 +98,7 @@ public class Controller {
 
             if (fileInStorage(storage, file)) {
 
-                prepareStatement.setObject(1, 0);
+                prepareStatement.setObject(1, null);
                 prepareStatement.setLong(2, file.getId());
                 file.setStorage(null);
                 int res = prepareStatement.executeUpdate();
