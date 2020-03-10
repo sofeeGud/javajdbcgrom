@@ -18,9 +18,7 @@ public class FileDAO implements GenDAO<File> {
             preparedStatement.setString(2, file.getName());
             preparedStatement.setString(3, file.getFormat());
             preparedStatement.setLong(4, file.getSize());
-            if (file.getStorage() != null) preparedStatement.setLong(5, file.getStorage().getId());
-            else preparedStatement.setObject(5, null);
-
+            preparedStatement.setLong(5, file.getStorage().getId());
 
             int res = preparedStatement.executeUpdate();
 
@@ -62,10 +60,8 @@ public class FileDAO implements GenDAO<File> {
             prepareStatement.setString(1, file.getName());
             prepareStatement.setString(2, file.getFormat());
             prepareStatement.setLong(3, file.getSize());
-            if (file.getStorage() != null) prepareStatement.setLong(4, file.getStorage().getId());
-            else prepareStatement.setObject(4, null);
+            prepareStatement.setLong(4, file.getStorage().getId());
             prepareStatement.setLong(5, file.getId());
-
 
             ValidateId(prepareStatement, file.getId());
 
@@ -91,19 +87,14 @@ public class FileDAO implements GenDAO<File> {
             prepareStatement.setLong(1, id);
             ResultSet rs = prepareStatement.executeQuery();
 
-
             while (rs.next()) {
-
 
                 String[] formats = rs.getString(6).split(",");
                 Storage storage = new Storage(rs.getLong(5), formats, rs.getString(7), rs.getLong(8));
-               File file = new File(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getLong(4), storage);
-
+                File file = new File(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getLong(4), storage);
 
                 ValidateId(prepareStatement, id);
                 return file;
-
-
             }
 
         } catch (SQLException e) {
@@ -119,9 +110,8 @@ public class FileDAO implements GenDAO<File> {
 
     private void ValidateId(PreparedStatement preparedStatement, long id) throws SQLException {
         int res = preparedStatement.executeUpdate();
-        if (res == 0) System.err.println("There is no ID= " + id);
+        if (res == 0) System.err.println("There is not ID= " + id);
 
     }
-
 
 }

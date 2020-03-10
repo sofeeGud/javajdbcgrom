@@ -1,4 +1,5 @@
 package lesson4.hw.dao;
+
 import lesson4.hw.Storage;
 
 import java.sql.*;
@@ -36,8 +37,6 @@ public class StorageDAO implements GenDAO<Storage> {
              PreparedStatement prepareStatement = conn.prepareStatement("DELETE FROM STORAGE WHERE ID = ?")) {
 
             prepareStatement.setLong(1, id);
-
-
             ValidateId(prepareStatement, id);
 
         } catch (SQLException e) {
@@ -118,7 +117,7 @@ public class StorageDAO implements GenDAO<Storage> {
 
     private void ValidateId(PreparedStatement preparedStatement, long id) throws SQLException {
         int res = preparedStatement.executeUpdate();
-        if (res == 0) System.err.println("There is no ID= " + id);
+        if (res == 0) System.err.println("There is not ID= " + id);
         else System.out.println("Process finished with result " + res);
     }
 }

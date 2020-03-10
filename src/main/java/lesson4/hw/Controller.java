@@ -27,17 +27,13 @@ public class Controller {
 
             conn.setAutoCommit(false);
 
-            if (validateStorageSize(storage, file) && !fileInStorage(storage, file)) {
-
-                file.setStorage(storage);
+            if (validateStorageSize(storage, file)) {
                 prepareStatement.setLong(1, storage.getId());
                 prepareStatement.setLong(2, file.getId());
                 int res = prepareStatement.executeUpdate();
-
-                System.out.println("File " + file.getName() + "." + file.getFormat() + " successfully been put to storage " + storage.getId() + " with a result " + res);
-
+                System.out.println("File " + file.getName() + "." + file.getFormat() + " put to storage " + storage.getId() + " with a result " + res);
                 conn.commit();
-            } else throw new Exception("Something wrong. Please check your file and storage");
+            } else throw new Exception("Something wrong");
 
 
         } catch (SQLException e) {
@@ -53,31 +49,19 @@ public class Controller {
 
 
         try (Connection conn = getConnection();
-             PreparedStatement prepareStatement = conn.prepareStatement("UPDATE FILES SET STORAGE_ID = ?")) {
+             PreparedStatement prepareStatement = conn.prepareStatement("UPDATE FILES SET STORAGE_ID = ? WHERE ID=? ")) {
 
             conn.setAutoCommit(false);
-
-            prepareStatement.setLong(1, storage.getId());
-
-            if (validateFilesSize(files, storage)) {
-
-                int res = prepareStatement.executeUpdate();
-
-                for (File file : files) {
-                    if (!fileInStorage(storage, file)) {
-                        file.setStorage(storage);
-                        System.out.println("File " + file.getName() + "." + file.getFormat() + " put to storage " + storage.getId() + " with result " + res);
-                    } else {
-                        throw new Exception("File " + file.getName() + "." + file.getFormat() + " is already in storage " + storage.getId() + ". Put failed");
-
-                    }
-                }
-
-
-                conn.commit();
-
-            } else conn.rollback();
-
+            validateFilesSize(files, storage);
+            for (File file : files) {
+                if (file != null) {
+                    prepareStatement.setLong(1, storage.getId());
+                    prepareStatement.setLong(2, file.getId());
+                    int res = prepareStatement.executeUpdate();
+                    System.out.println("File " + file.getName() + "." + file.getFormat() + " put to storage " + storage.getId() + " with result " + res);
+                    conn.commit();
+                } else conn.rollback();
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -92,21 +76,18 @@ public class Controller {
 
 
         try (Connection conn = getConnection();
-             PreparedStatement prepareStatement = conn.prepareStatement("UPDATE FILES SET STORAGE_ID = ? WHERE ID = ?")) {
+             PreparedStatement prepareStatement = conn.prepareStatement("DELETE FROM FILES WHERE ID = ? AND STORAGE_ID=? ")) {
 
             conn.setAutoCommit(false);
 
-            if (fileInStorage(storage, file)) {
 
-                prepareStatement.setObject(1, null);
-                prepareStatement.setLong(2, file.getId());
-                file.setStorage(null);
-                int res = prepareStatement.executeUpdate();
-                conn.commit();
-                System.out.println("File " + file.getName() + "." + file.getFormat() + " deleted from storage " + storage.getId() + " with result " + res);
-                System.out.println(file.toString());
+            prepareStatement.setLong(1, file.getId());
+            prepareStatement.setObject(2, storage.getId());
+            int res = prepareStatement.executeUpdate();
+            conn.commit();
+            System.out.println("File " + file.getName() + "." + file.getFormat() + " deleted with result " + res);
+            System.out.println(file.toString());
 
-            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -127,27 +108,18 @@ public class Controller {
 
 
             conn.setAutoCommit(false);
-
-            if (validateFilesSize(files, storageTo)) {
-                prepareStatement.setLong(1, storageTo.getId());
-                prepareStatement.setLong(2, storageFrom.getId());
-                int res = prepareStatement.executeUpdate();
-                for (File file : files) {
-
-                    file.setStorage(storageTo);
-                    System.out.println("File " + file.getName() + "." + file.getFormat() + " transferred to storage " + storageTo.getId());
-
+            for (File file : files) {
+                if (validateFilesSize(files, storageTo)) {
+                    prepareStatement.setLong(1, storageTo.getId());
+                    prepareStatement.setLong(2, storageFrom.getId());
+                    int res = prepareStatement.executeUpdate();
+                    System.out.println("File " + file.getName() + "." + file.getFormat() + " transferred to storage " + storageTo.getId() + "  with result " + res);
+                    conn.commit();
+                } else {
+                    System.err.println("Not enough space in storage " + storageTo.getId());
+                    conn.rollback();
                 }
-
-
-                conn.commit();
-
-            } else {
-                System.err.println("Not enough space in storage " + storageTo.getId());
-                conn.rollback();
             }
-
-
         } catch (SQLException e) {
             e.printStackTrace();
             getConnection().rollback();
@@ -158,23 +130,27 @@ public class Controller {
 
     public File transferFile(Storage storageFrom, Storage storageTo, long id) throws Exception {
 
-
         File file = fileDAO.findById(id);
+        try (Connection conn = getConnection();
+             PreparedStatement prepareStatement = conn.prepareStatement
+                     ("UPDATE FILES SET STORAGE_ID = ? WHERE ID= ? AND STORAGE_ID = ?")) {
+            conn.setAutoCommit(false);
+            if (!validateStorageSize(storageTo, file))
 
-
-        if (!validateStorageSize(storageTo, file))
             throw new Exception("Not enough space for file " + file.getName() + "." + file.getFormat() + " in storage " + storageTo.getId());
-        if (!fileInStorage(storageFrom, file))
-            throw new Exception("There's no file " + file.getName() + "." + file.getFormat() + " in storage " + storageFrom.getId());
         else {
-
-            file.setStorage(storageTo);
-            System.out.println("File " + file.getName() + "." + file.getFormat() + " transferred to storage " + storageTo.getId());
-
+                    prepareStatement.setLong(1, storageTo.getId());
+                    prepareStatement.setLong(2, file.getId());
+                    prepareStatement.setLong(3, storageFrom.getId());
+                    int res = prepareStatement.executeUpdate();
+            System.out.println("File " + file.getName() + "." + file.getFormat() + " transferred to storage " + storageTo.getId() + "  with result " + res);
 
 
         }
-
+        } catch (SQLException e) {
+            e.printStackTrace();
+            getConnection().rollback();
+        }
 
         return file;
     }
@@ -184,7 +160,7 @@ public class Controller {
 
         if (storage != null && file != null)
             return ((storage.getStorageMaxSize() - getFilesSize(storage)) > file.getSize());
-        else if (storage == null) throw new Exception("There's no storage " + storage.getId());
+        else if (storage == null) throw new Exception("There is not storage " + storage.getId());
         else throw new Exception("Something wrong");
     }
 
@@ -210,38 +186,6 @@ public class Controller {
 
 
         return filesTotalSize;
-    }
-
-    private boolean fileInStorage(Storage storage, File file) throws Exception {
-
-        long databaseID = 0;
-
-        try (Connection conn = getConnection();
-             PreparedStatement prepareStatement = conn.prepareStatement("SELECT STORAGE_ID FROM FILES WHERE ID = ?")) {
-
-            conn.setAutoCommit(false);
-
-            prepareStatement.setLong(1, file.getId());
-            ResultSet rs = prepareStatement.executeQuery();
-
-            while (rs.next()) {
-                databaseID = rs.getLong(1);
-            }
-
-            conn.commit();
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            getConnection().rollback();
-        }
-
-
-        if (storage == null) return false;
-        if (file == null) return false;
-        else
-            return (databaseID == storage.getId() && file.getStorage().getId() == storage.getId());
-
     }
 
     private boolean validateFilesSize(List<File> files, Storage storage) throws Exception {
