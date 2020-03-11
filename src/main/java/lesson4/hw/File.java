@@ -1,6 +1,5 @@
 package lesson4.hw;
 
-import java.util.Objects;
 
 public class File {
     private long id;
