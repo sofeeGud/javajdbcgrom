@@ -1,5 +1,6 @@
 package jdbc.lesson4.hw.dao;
 
+
 import java.sql.*;
 
 public interface GenDAO<T> {
@@ -8,9 +9,9 @@ public interface GenDAO<T> {
     public static final String USER = "main";
     public static final String PASS = "main1111";
 
-    T save(T t);
+    T save(T t) throws Exception;
 
-    void delete(long id);
+    void delete(long id) throws Exception;
 
     T update(T t) throws SQLException;
 
