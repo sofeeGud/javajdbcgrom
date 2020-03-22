@@ -3,10 +3,10 @@ import lombok.*;
 
 import java.util.Arrays;
 
-/*@Getter
+@Getter
 @Setter
 @ToString
-@EqualsAndHashCode*/
+@EqualsAndHashCode
 public class Storage {
 
     private long id;
@@ -20,52 +20,36 @@ public class Storage {
         this.storageCountry = storageCountry;
         this.storageMaxSize = storageMaxSize;
     }
+
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String[] getFormatsSupported() {
         return formatsSupported;
     }
 
+    public void setFormatsSupported(String[] formatsSupported) {
+        this.formatsSupported = formatsSupported;
+    }
+
     public String getStorageCountry() {
         return storageCountry;
+    }
+
+    public void setStorageCountry(String storageCountry) {
+        this.storageCountry = storageCountry;
     }
 
     public long getStorageMaxSize() {
         return storageMaxSize;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Storage storage = (Storage) o;
-
-        if (id != storage.id) return false;
-        if (storageMaxSize != storage.storageMaxSize) return false;
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        if (!Arrays.equals(formatsSupported, storage.formatsSupported)) return false;
-        return storageCountry.equals(storage.storageCountry);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + Arrays.hashCode(formatsSupported);
-        result = 31 * result + storageCountry.hashCode();
-        result = 31 * result + (int) (storageMaxSize ^ (storageMaxSize >>> 32));
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Storage{" +
-                "id=" + id +
-                ", formatsSupported=" + Arrays.toString(formatsSupported) +
-                ", storageCountry='" + storageCountry + '\'' +
-                ", storageMaxSize=" + storageMaxSize +
-                '}';
+    public void setStorageMaxSize(long storageMaxSize) {
+        this.storageMaxSize = storageMaxSize;
     }
 }
