@@ -61,7 +61,7 @@ public class Demo {
         //roomDAO.save(room3);
         //roomDAO.delete(room3);
         //System.out.println(roomDAO.findById(22));
-        roomDAO.update(room3);
+        //roomDAO.update(room3);
 
     }
 }
