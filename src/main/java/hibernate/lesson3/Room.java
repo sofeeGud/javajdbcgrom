@@ -19,7 +19,7 @@ public class Room {
     @Id
     @SequenceGenerator(name = "ROOM_SEQ", sequenceName = "ROOM_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ROOM_SEQ")
-    @Column(name = "ROOM_ID")
+    @Column(name = "ID")
     public long getId() {
         return id;
     }
@@ -50,7 +50,7 @@ public class Room {
     }
 
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "HOTEL_ID")
     public Hotel getHotel() {
         return hotel;
