@@ -11,8 +11,11 @@
         <!--<mapping class="hibernate.lesson1.Product"></mapping>-->
         <!--<mapping class="hibernate.lesson1.hw.Product"></mapping>-->
         <!--<mapping class="hibernate.lesson2.hw2.Product"></mapping>-->
-        <mapping class="hibernate.lesson3.Hotel"></mapping>
-        <mapping class="hibernate.lesson3.Room"></mapping>
+        <mapping class="hibernate.lesson4.model.Room"></mapping>
+        <mapping class="hibernate.lesson4.model.Hotel"></mapping>
+        <mapping class="hibernate.lesson4.model.Order"></mapping>
+        <mapping class="hibernate.lesson4.model.User"></mapping>
+
 
     </session-factory>
 </hibernate-configuration>
