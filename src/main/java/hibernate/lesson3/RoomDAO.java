@@ -12,26 +12,19 @@ public class RoomDAO {
 
     public void save(Room room) {
 
-        Session session = null;
         Transaction tr = null;
-        try {
+        try(Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
             tr = session.getTransaction();
             tr.begin();
-
             session.save(room);
-
             tr.commit();
+            session.close();
         } catch (HibernateException e) {
             System.out.println("Save is failed");
             System.out.println(e.getMessage());
             if (tr != null)
                 tr.rollback();
-        } finally {
-            if (session != null)
-                session.close();
-
         }
         System.out.println("Save is done");
     }
@@ -39,26 +32,23 @@ public class RoomDAO {
 
     public void update(Room room) {
 
-        Session session = null;
-        Transaction tr = null;
-        try {
 
-            session = createSessionFactory().openSession();
+        Transaction tr = null;
+        try (Session session = createSessionFactory().openSession()){
+
             tr = session.getTransaction();
             tr.begin();
 
             session.update(room);
 
             tr.commit();
+
+            session.close();
         } catch (HibernateException e) {
             System.out.println("Update is failed");
             System.out.println(e.getMessage());
             if (tr != null)
                 tr.rollback();
-        } finally {
-            if (session != null)
-                session.close();
-
         }
         System.out.println("Update is done");
     }
@@ -66,44 +56,36 @@ public class RoomDAO {
 
     public void delete(Room room) {
 
-        Session session = null;
         Transaction tr = null;
-        try {
+        try (Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
             tr.begin();
 
             session.delete(room);
 
             tr.commit();
+            session.close();
         } catch (HibernateException e) {
             System.out.println("Delete is failed");
             System.out.println(e.getMessage());
             if (tr != null)
                 tr.rollback();
-        } finally {
-            if (session != null)
-                session.close();
-
         }
         System.out.println("Delete is done");
     }
 
     public Room findById(long id) throws Exception {
-        Session session = null;
-        try {
-            session = createSessionFactory().openSession();
-            return (Room) session.createSQLQuery("SELECT * FROM ROOM WHERE ROOM_ID = :roomId")
+        try (Session session = createSessionFactory().openSession();) {
+
+            return (Room) session.createSQLQuery("SELECT * FROM ROOM WHERE ID = :roomId")
                     .setParameter("roomId", id)
                     .addEntity(Room.class).getSingleResult();
 
 
         } catch (HibernateException e) {
             throw new Exception("findById failed" + e.getMessage());
-        } finally {
-            if (session != null)
-                session.close();
         }
     }
 

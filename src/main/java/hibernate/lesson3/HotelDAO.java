@@ -13,26 +13,22 @@ public class HotelDAO {
 
     public void save(Hotel hotel) {
 
-        Session session = null;
         Transaction tr = null;
-        try {
+        try (Session session = createSessionFactory().openSession()){
 
-            session = createSessionFactory().openSession();
             tr = session.getTransaction();
             tr.begin();
 
             session.save(hotel);
 
             tr.commit();
+
+            session.close();
         } catch (HibernateException e) {
             System.out.println("Save is failed");
             System.out.println(e.getMessage());
             if (tr != null)
                 tr.rollback();
-        } finally {
-            if (session != null)
-                session.close();
-
         }
         System.out.println("Save is done");
     }
@@ -40,25 +36,21 @@ public class HotelDAO {
 
     public void update(Hotel hotel) {
 
-        Session session = null;
         Transaction tr = null;
-        try {
+        try (Session session = createSessionFactory().openSession()){
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
             tr.begin();
 
             session.update(hotel);
-
             tr.commit();
+            session.close();
         } catch (HibernateException e) {
             System.out.println("Update is failed");
             System.out.println(e.getMessage());
             if (tr != null)
                 tr.rollback();
-        } finally {
-            if (session != null)
-                session.close();
 
         }
         System.out.println("Update is done");
@@ -67,43 +59,33 @@ public class HotelDAO {
 
     public void delete(Hotel hotel) {
 
-        Session session = null;
         Transaction tr = null;
-        try {
+        try (Session session = createSessionFactory().openSession()){
 
-            session = createSessionFactory().openSession();
             tr = session.getTransaction();
             tr.begin();
 
             session.delete(hotel);
 
             tr.commit();
+            session.close();
         } catch (HibernateException e) {
             System.out.println("Delete is failed");
             System.out.println(e.getMessage());
             if (tr != null)
                 tr.rollback();
-        } finally {
-            if (session != null)
-                session.close();
-
         }
         System.out.println("Delete is done");
     }
 
     public Hotel findById(long id) throws Exception {
-        Session session = null;
-        try {
-            session = createSessionFactory().openSession();
+        try (Session session = createSessionFactory().openSession()){
             return (Hotel) session.createSQLQuery("SELECT * FROM HOTEL WHERE ID = :hotelId")
                     .setParameter("hotelId", id)
                     .addEntity(Hotel.class).getSingleResult();
 
         } catch (HibernateException e) {
             throw new Exception("findById failed" + e.getMessage());
-        } finally {
-            if (session != null)
-                session.close();
         }
     }
 

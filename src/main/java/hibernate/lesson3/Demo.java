@@ -52,16 +52,22 @@ public class Demo {
         room2.setHotel(hotel2);
 
         Room room3 = new Room();
-        room3.setNumberOfGuests(5);
+        room3.setNumberOfGuests(10);
         room3.setPrice(1000.65);
         room3.setBreakfastIncluded(1);
         room3.setPetsAllowed(0);
         room3.setDateAvailableFrom(new Date());
         room3.setHotel(hotel4);
-        //roomDAO.save(room3);
-        //roomDAO.delete(room3);
+//        roomDAO.save(room3);
         //System.out.println(roomDAO.findById(22));
-        roomDAO.update(room3);
+        room3.setNumberOfGuests(20);
+
+
+        Room rommmmmm = roomDAO.findById(1);
+
+
+        roomDAO.delete(rommmmmm);
+
 
     }
 }

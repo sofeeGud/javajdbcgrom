@@ -1,5 +1,10 @@
 package hibernate.lesson3;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
 import javax.persistence.*;
 import java.util.Date;
 @Entity
@@ -127,4 +132,7 @@ public class Room {
                 ", hotel=" + hotel +
                 '}';
     }
+
+
+
 }
