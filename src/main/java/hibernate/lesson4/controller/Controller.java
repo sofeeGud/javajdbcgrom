@@ -10,10 +10,6 @@ public class Controller {
 
     protected boolean isAccess(UserType userType) {
         if (authorization.checkIn()) {
-            if (userType == UserType.ADMIN && !authorization.isAdmin()) {
-                System.err.println("You can not using this function");
-                return false;
-            }
 
             return true;
         }

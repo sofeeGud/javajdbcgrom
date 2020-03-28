@@ -42,7 +42,7 @@ public class RoomDAO extends DAO<Room>{
     public List<Room> findRooms(Filter filter) throws Exception {
         try (Session session = createSessionFactory().openSession()) {
 
-            return (List<Room>) session.createSQLQuery("SELECT r.* FROM ROOM " +
+            return (List<Room>) session.createSQLQuery("SELECT r.* FROM ROOM r " +
                     "    LEFT JOIN HOTEL h ON r.HOTEL_ID = h.ID " +
                     "    WHERE (:NumberOfGuests = 0 OR r.NUMBER_OF_GUESTS = :numberOfGuests) " +
                     "    AND (:price = 0 OR r.PRICE <= :price) " +

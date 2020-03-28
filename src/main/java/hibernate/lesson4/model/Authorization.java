@@ -29,7 +29,4 @@ public class Authorization {
         return isLogin;
     }
 
-    public boolean isAdmin() {
-        return userNow.getUserType() == UserType.ADMIN;
-    }
 }

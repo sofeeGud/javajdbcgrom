@@ -73,7 +73,7 @@ public class OrderDAO extends DAO<Order> {
     private Order getOrderByRoomIdAndUserId(long roomId, long userId) throws Exception {
         try (Session session = createSessionFactory().openSession()) {
 
-            return (Order) session.createSQLQuery("SELECT * FROM FP_ORDER WHERE USER_ID = :userId AND ROOM_ID = :roomId")
+            return (Order) session.createSQLQuery("SELECT * FROM ORDERS WHERE USER_ID = :userId AND ROOM_ID = :roomId")
                     .setParameter("userId", userId)
                     .setParameter("roomId", roomId)
                     .addEntity(Order.class).getSingleResult();

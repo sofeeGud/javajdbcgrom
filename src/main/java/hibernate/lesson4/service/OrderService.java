@@ -13,7 +13,7 @@ public class OrderService {
         orderDAO = new OrderDAO();
         roomDAO = new RoomDAO();
     }
-    public void bookRoom(long roomId, long userId, long hotelId, Date dateTo, Date dateFrom) throws Exception {
+    public void bookRoom(long roomId, long userId, long hotelId, Date dateFrom, Date dateTo) throws Exception {
         if (!orderDAO.validateOrder(roomId, userId, hotelId)) {
             System.err.println("Failed to place an order. Check incoming parameters. In method bookRoom");
         } else
