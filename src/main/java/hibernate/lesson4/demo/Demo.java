@@ -35,7 +35,7 @@ public class Demo {
 
         RoomService roomService = new RoomService();
         Filter filter = new Filter();
-       // filter.setCity("city10");
+        filter.setCity("city10");
         //filter.setCountry("country10");
         RoomDAO roomDAO = new RoomDAO();
         System.out.println(roomDAO.findRooms(filter));
