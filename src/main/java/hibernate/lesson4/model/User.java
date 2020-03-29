@@ -64,8 +64,8 @@ public class User {
         this.userType = userType;
     }
 
-    @OneToMany (targetEntity = hibernate.lesson4.model.Order.class, cascade = CascadeType.ALL, mappedBy = "userOrdered", fetch = FetchType.LAZY)
-    public List getOrders() {
+    @OneToMany (cascade = CascadeType.ALL, mappedBy = "userOrdered", fetch = FetchType.LAZY)
+    public List<Order> getOrders() {
         return orders;
     }
 

@@ -45,8 +45,8 @@ public class Hotel {
         return street;
     }
 
-    @OneToMany (targetEntity = hibernate.lesson4.model.Room.class, cascade = CascadeType.ALL, mappedBy = "hotel", fetch = FetchType.LAZY)
-    public List getRooms() {
+    @OneToMany (cascade = CascadeType.ALL, mappedBy = "hotel", fetch = FetchType.LAZY)
+    public List<Room> getRooms() {
         return rooms;
     }
 

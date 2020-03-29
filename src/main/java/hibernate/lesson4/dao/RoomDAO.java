@@ -44,15 +44,15 @@ public class RoomDAO extends DAO<Room>{
 
             return (List<Room>) session.createSQLQuery("SELECT r.* FROM ROOM r " +
                     "    LEFT JOIN HOTEL h ON r.HOTEL_ID = h.ID " +
-                    "    WHERE (:NumberOfGuests = 0 OR r.NUMBER_OF_GUESTS = :numberOfGuests) " +
+                    "    WHERE (:numberOfGuests = 0 OR r.NUMBER_OF_GUESTS = :numberOfGuests) " +
                     "    AND (:price = 0 OR r.PRICE <= :price) " +
-                    "    AND (:breakfastIncluded = r.BREAKFAST_INCLUDED) " +
+                    "    AND (:breakfastIncluded  = r.BREAKFAST_INCLUDED) " +
                     "    AND (:petsAllowed = r.PETS_ALLOWED) " +
                     "    AND (:dateAvailableFrom >= r.DATE_AVAILABLE_FROM) " +
                     "    AND (:hotelName IS NULL OR h.NAME = :hotelName) " +
                     "    AND (:hotelCountry IS NULL OR h.COUNTRY = :hotelCountry) " +
                     "    AND (:hotelCity IS NULL OR h.CITY = :hotelCity) " )
-                    .setParameter("NumberOfGuests", filter.getNumberOfGuests())
+                    .setParameter("numberOfGuests", filter.getNumberOfGuests())
                     .setParameter("price", filter.getPrice())
                     .setParameter("breakfastIncluded", filter.getBreakfastIncluded() ? 1 : 0)
                     .setParameter("petsAllowed", filter.getPetsAllowed() ? 1 : 0)
